@@ -17,6 +17,13 @@ export class CourseService {
 
         return courses;
     }
+    async findOne(id: string) : Promise<Course>{
+        const course = await this.courseModel.findById(id);
+        if(!course){
+            throw new BadRequestException('Course does not exist');
+        }
+        return course;
+    }
     async addCourse(course: CreateCourseDto): Promise<Course> {
         const { title, description, lessons, category, averageRating, price } = course;
         if (!title || !description ||!lessons || !category|| !averageRating|| !price) {
