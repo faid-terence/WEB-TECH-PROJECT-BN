@@ -1,8 +1,10 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, BadRequestException, UsePipes } from '@nestjs/common';
 import { Course } from './schemas/course.schema';
 import {InjectModel} from '@nestjs/mongoose'
 import * as mongoose from 'mongoose'
 import { promises } from 'dns';
+import { CreateCourseDto } from './dto/create-course.dto';
+import { ValidationPipe } from '@nestjs/common';
 @Injectable()
 export class CourseService {
     constructor(
@@ -14,5 +16,20 @@ export class CourseService {
         const courses = await this.courseModel.find();
 
         return courses;
+    }
+    async addCourse(course: CreateCourseDto): Promise<Course> {
+        const { title, description, lessons, category, averageRating, price } = course;
+        if (!title || !description ||!lessons || !category|| !averageRating|| !price) {
+            throw new BadRequestException('Invalid Inputs.');
+        }
+        try {
+            const newCourse = await this.courseModel.create(course);
+            return newCourse;
+        } catch (error) {
+            if (error.code === 11000) {
+                throw new BadRequestException('Course with the same title already exists.');
+            }
+            throw new BadRequestException('Failed to add the course. Please try again later.');
+        }
     }
 }
