@@ -1,7 +1,8 @@
-import { Controller, Get, Post, Body,Param } from '@nestjs/common';
+import { Controller, Get, Post, Body,Param, Put , Delete} from '@nestjs/common';
 import { CourseService } from './course.service';
 import { Course } from './schemas/course.schema';
 import { CreateCourseDto } from './dto/create-course.dto';
+import { UpdateCourseDto } from './dto/update-course.dto';
 @Controller('courses')
 export class CourseController {
     constructor(private courseService : CourseService) {}
@@ -24,4 +25,24 @@ export class CourseController {
     ) : Promise<Course>{
         return this.courseService.findOne(id)
     }
+
+    @Put(':id')
+    async updateCourse(
+        @Param('id')
+        id : string,
+        @Body()
+        course: UpdateCourseDto
+    ) : Promise<Course>{
+        return this.courseService.updateCourse(id, course)
+    }
+
+    @Delete(':id')
+
+    async deleteCourse(
+        @Param('id')
+        id: string
+    ) : Promise<{ success: boolean, message: string, courses?: Course[]} >{
+        return this.courseService.deleteCourse(id);
+    }
+
 }

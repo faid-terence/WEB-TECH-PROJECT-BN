@@ -1,7 +1,7 @@
 import { Category } from "../schemas/course.schema";
 import { IsString, IsNotEmpty, IsArray, IsNumber, IsOptional, MaxLength, ArrayNotEmpty } from 'class-validator';
 
-export class CreateCourseDto {
+export class UpdateCourseDto {
     @IsString()
     @IsNotEmpty()
     @MaxLength(100)
@@ -15,7 +15,7 @@ export class CreateCourseDto {
     @IsOptional()
     @IsArray()
     @ArrayNotEmpty()
-    lessons: string[];
+    lessons: [];
   
     @IsString()
     @IsNotEmpty()
@@ -24,13 +24,12 @@ export class CreateCourseDto {
     @IsNumber()
     @IsNotEmpty()
     price: number;
-  
-    @IsNumber()
-    @IsOptional()
-    averageRating: number;
 
-    
     @IsNumber()
     @IsNotEmpty()
     duration: number;
+
+    @IsNumber()
+    @IsOptional()
+    averageRating: number;
   }
