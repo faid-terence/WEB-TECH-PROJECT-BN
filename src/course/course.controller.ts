@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body } from '@nestjs/common';
+import { Controller, Get, Post, Body,Param } from '@nestjs/common';
 import { CourseService } from './course.service';
 import { Course } from './schemas/course.schema';
 import { CreateCourseDto } from './dto/create-course.dto';
@@ -16,5 +16,12 @@ export class CourseController {
         course: CreateCourseDto
     ) : Promise<Course>{
         return this.courseService.addCourse(course);
+    }
+    @Get(':id')
+    async getOneCourse(
+        @Param('id')
+        id: string
+    ) : Promise<Course>{
+        return this.courseService.findOne(id)
     }
 }
