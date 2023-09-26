@@ -29,7 +29,7 @@ export class Course {
     price: string;
 
     @Prop()
-    avaerageRating: number;
+    averageRating: number;
 
 }
 
