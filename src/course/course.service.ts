@@ -39,4 +39,46 @@ export class CourseService {
             throw new BadRequestException('Failed to add the course. Please try again later.');
         }
     }
+
+    async updateCourse(id: string , course:Course) : Promise<Course>{
+        const { title, description, lessons, category, averageRating, price } = course;
+        if (!title || !description ||!lessons || !category|| !averageRating|| !price) {
+            throw new BadRequestException('Invalid Inputs.');
+        }
+       try {
+        return await this.courseModel.findByIdAndUpdate(id, course, {
+            new: true,
+            runValidators: true
+        });
+        
+       } catch (error) {
+        if (error.code === 11000) {
+            throw new BadRequestException('Course with the same title already exists.');
+        }
+        throw new BadRequestException('Failed to add the course. Please try again later.');
+       }
+    }
+    async deleteCourse(id: string): Promise<{ success: boolean, message: string, courses?: Course[] }> {
+        try {
+            const deletedCourse = await this.courseModel.findByIdAndDelete(id);
+    
+            if (!deletedCourse) {
+                throw new Error("Course not found");
+            }
+    
+            const remainingCourses = await this.courseModel.find();
+    
+            return {
+                success: true,
+                message: "Course deleted successfully",
+                courses: remainingCourses
+            };
+        } catch (error) {
+            return {
+                success: false,
+                message: error.message || "Error deleting course",
+            };
+        }
+    }
+    
 }

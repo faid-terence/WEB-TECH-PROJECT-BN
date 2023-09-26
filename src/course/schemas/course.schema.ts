@@ -26,7 +26,7 @@ export class Course {
     @Prop()
     category: Category
     @Prop() 
-    price: string;
+    price: number;
 
     @Prop()
     averageRating: number;
