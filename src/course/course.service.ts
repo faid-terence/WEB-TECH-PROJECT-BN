@@ -12,11 +12,18 @@ export class CourseService {
         private courseModel : mongoose.Model<Course>
     ){}
 
-    async findAll() : Promise<Course[]>{
-        const courses = await this.courseModel.find();
-
-        return courses;
-    }
+        async findAll(searchQuery?: string): Promise<Course[]> {
+            let courses = await this.courseModel.find();
+        
+            // If a searchQuery parameter is provided, filter the courses by title
+            if (searchQuery) {
+            courses = courses.filter((course) =>
+                course.title.toLowerCase().includes(searchQuery.toLowerCase())
+            );
+            }
+        
+            return courses;
+        }
     async findOne(id: string) : Promise<Course>{
         const course = await this.courseModel.findById(id);
         if(!course){
