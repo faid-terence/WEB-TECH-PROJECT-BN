@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body,Param, Put , Delete} from '@nestjs/common';
+import { Controller, Get, Post, Body,Param, Put , Delete, Query} from '@nestjs/common';
 import { CourseService } from './course.service';
 import { Course } from './schemas/course.schema';
 import { CreateCourseDto } from './dto/create-course.dto';
@@ -8,8 +8,8 @@ export class CourseController {
     constructor(private courseService : CourseService) {}
 
     @Get()
-    async getAllCourses() : Promise<Course[]>{
-        return this.courseService.findAll();
+    async getAllCourses(@Query('searchQuery') searchQuery?: string): Promise<Course[]> {
+      return this.courseService.findAll(searchQuery);
     }
     @Post()
     async addNewCourse(
