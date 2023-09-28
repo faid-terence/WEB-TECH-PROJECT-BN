@@ -1,8 +1,9 @@
-import { Controller, Get, Post, Body,Param, Put , Delete, Query} from '@nestjs/common';
+import { Controller, Get, Post, Body,Param, Put , Delete, Query, UseGuards} from '@nestjs/common';
 import { CourseService } from './course.service';
 import { Course } from './schemas/course.schema';
 import { CreateCourseDto } from './dto/create-course.dto';
 import { UpdateCourseDto } from './dto/update-course.dto';
+import { AuthGuard } from '@nestjs/passport';
 @Controller('courses')
 export class CourseController {
     constructor(private courseService : CourseService) {}
@@ -12,6 +13,7 @@ export class CourseController {
       return this.courseService.findAll(searchQuery);
     }
     @Post()
+    @UseGuards(AuthGuard('jwt'))
     async addNewCourse(
         @Body()
         course: CreateCourseDto
