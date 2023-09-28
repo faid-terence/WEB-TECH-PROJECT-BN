@@ -1,9 +1,10 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Param, Post, Put } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import {Get} from '@nestjs/common'
 import { User } from './schema/user.schema';
 import { RegisterUserDto } from './dto/create-user.dto';
 import { LoginUserDto } from './dto/login-user.dto';
+import { UpdateProfileDto } from './dto/update-profile.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -29,4 +30,11 @@ export class AuthController {
     ) : Promise <{token : string}> {
         return this.authService.loginUser(user);
     }
+
+    @Put(':id')
+  async updateUserProfile(@Param('id') userId: string, @Body() updateUserDto: UpdateProfileDto): Promise<User> {
+    const updatedUser = await this.authService.updateUserProfile(userId, updateUserDto);
+    return updatedUser;
+  }
+
 }

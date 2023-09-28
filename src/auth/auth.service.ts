@@ -1,5 +1,5 @@
 import { IsString } from 'class-validator';
-import { BadRequestException, Injectable, InternalServerErrorException } from '@nestjs/common';
+import { BadRequestException, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { User } from './schema/user.schema';
 import * as mongoose from 'mongoose'
@@ -7,6 +7,7 @@ import * as bcrypt from 'bcrypt';
 import { RegisterUserDto } from './dto/create-user.dto';
 import { LoginUserDto } from './dto/login-user.dto';
 import {JwtService} from '@nestjs/jwt'
+import { UpdateProfileDto } from './dto/update-profile.dto';
 
 @Injectable()
 export class AuthService {
@@ -76,5 +77,47 @@ export class AuthService {
         })
         return {token}
       }
+      
+
+  async updateUserProfile(userId: string, updateUserDto: UpdateProfileDto): Promise<User> {
+    try {
+      // Find the user by their ID
+      const user = await this.userModel.findById(userId);
+
+      // If the user doesn't exist, throw a NotFoundException
+      if (!user) {
+        throw new NotFoundException('User not found');
+      }
+
+      // Update user properties based on the DTO
+      if (updateUserDto.name) {
+        user.name = updateUserDto.name;
+      }
+
+      if (updateUserDto.email) {
+        user.email = updateUserDto.email;
+      }
+
+      if (updateUserDto.password) {
+        // Hash and update the password if provided
+        const saltRounds = 10;
+        const hashedPassword = await bcrypt.hash(updateUserDto.password, saltRounds);
+        user.password = hashedPassword;
+      }
+
+      if (updateUserDto.gender) {
+        user.gender = updateUserDto.gender;
+      }
+
+      // Save the updated user profile
+      const updatedUser = await user.save();
+
+      return updatedUser;
+    } catch (error) {
+      // Handle any errors, log them, and throw an InternalServerErrorException
+      console.error('Error updating user profile:', error);
+      throw new InternalServerErrorException('Internal Server Error');
+    }
+  }
       
 }
