@@ -1,16 +1,18 @@
-import { Body, Controller, Param, Post, Put } from '@nestjs/common';
+import { Body, Controller, Param, Post, Put , UseGuards} from '@nestjs/common';
 import { AuthService } from './auth.service';
 import {Get} from '@nestjs/common'
 import { User } from './schema/user.schema';
 import { RegisterUserDto } from './dto/create-user.dto';
 import { LoginUserDto } from './dto/login-user.dto';
 import { UpdateProfileDto } from './dto/update-profile.dto';
+import {AuthGuard} from '@nestjs/passport'
 
 @Controller('auth')
 export class AuthController {
     constructor(private authService: AuthService) {}
 
     @Get()
+    @UseGuards(AuthGuard('jwt'))
     async getAllUsers () : Promise<User[]>{
         return this.authService.findUsers();
     }
