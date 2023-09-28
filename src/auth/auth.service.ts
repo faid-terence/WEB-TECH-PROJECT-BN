@@ -1,15 +1,19 @@
+import { IsString } from 'class-validator';
 import { BadRequestException, Injectable, InternalServerErrorException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { User } from './schema/user.schema';
 import * as mongoose from 'mongoose'
 import * as bcrypt from 'bcrypt';   
 import { RegisterUserDto } from './dto/create-user.dto';
+import { LoginUserDto } from './dto/login-user.dto';
+import {JwtService} from '@nestjs/jwt'
 
 @Injectable()
 export class AuthService {
     constructor(
         @InjectModel(User.name)
-        private userModel : mongoose.Model<User>
+        private userModel : mongoose.Model<User>,
+        private jwtServices : JwtService,
     ){}
 
 
@@ -51,6 +55,26 @@ export class AuthService {
             throw new InternalServerErrorException('Internal Server Error');
           }
         }
+      }
+      async loginUser(user: LoginUserDto) : Promise<{token : string}> {
+        const {email, password} = user;
+        if(!email || !password) {
+            throw new BadRequestException("Please fill in all field");
+        }
+        const existUser = await this.userModel.findOne({email});
+        if(!existUser){
+            throw new BadRequestException("Invalid Credentials")
+        }
+        const passwordMatch = await bcrypt.compare(password, existUser.password);
+        if(!passwordMatch){
+            throw new BadRequestException("Invalid Credentials");
+        }
+        const token = this.jwtServices.sign({
+            id: existUser._id,
+            name: existUser.name,
+            isAdmin: existUser.isAdmin
+        })
+        return {token}
       }
       
 }
