@@ -39,4 +39,9 @@ export class AuthController {
     return updatedUser;
   }
 
+  @Get('verify/:token')
+  async verifyEmail(@Param('token') token: string){
+    return this.authService.verifyUserToken(token)
+  }
+
 }
