@@ -7,7 +7,7 @@ export class MailService {
 
     async sendUserEmail(user: string, verificationToken: string, email: string) {
         try {
-            const verificationLink = `https://example.com/verify?token=${verificationToken}`; // Replace with your actual verification link
+            const verificationLink = `http://localhost:3000/auth/verify/${verificationToken}`;
     
             await this.mailerService.sendMail({
                 to: email,
@@ -21,7 +21,7 @@ export class MailService {
                             <p style="font-size: 16px; color: #555;">Hi ${user},</p>
                             <p style="font-size: 16px; color: #555;">Welcome to MPA-CASH! We're excited to have you on board. To ensure the security of your account and access all the features of our platform, please verify your email address by clicking the link below:</p>
                             <a href="${verificationLink}" style="background-color: #f9f9f9; display: inline-block; padding: 10px; border-radius: 5px; text-align: center; font-size: 24px; font-weight: bold; color: #2678d0; text-decoration: none;">
-                                ${verificationToken}
+                               EmailVerification
                             </a>
                             <p style="font-size: 16px; color: #555;">This link will expire in 24 hours, so please verify your email address as soon as possible.</p>
                             <p style="font-size: 16px; color: #555;">If you didn't sign up for MPA-CASH or believe you received this email by mistake, please ignore it. Your account will not be activated until you verify your email.</p>
