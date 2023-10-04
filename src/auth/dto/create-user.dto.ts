@@ -13,7 +13,6 @@ export class RegisterUserDto {
   
     @IsString()
     @IsNotEmpty()
-    @MinLength(6) // Minimum password length of 6 characters
     password: string;
   
     @IsString()
@@ -22,4 +21,12 @@ export class RegisterUserDto {
   
     @IsBoolean()
     isAdmin: boolean;
+
+    @IsBoolean()
+    isVerified: boolean;
+
+    @IsString()
+    verificationToken: string
+
+
   }

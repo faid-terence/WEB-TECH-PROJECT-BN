@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Two-Factor Authentication Code</title>
+</head>
+<body style="font-family: Arial, sans-serif; margin: 0; padding: 0; background-color: #f4f4f4;">
+  <div style="background-color: #fff; max-width: 600px; margin: 20px auto; padding: 20px; border-radius: 5px; box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);">
+    <h2 style="color: #333;">Two-Factor Authentication Code</h2>
+    <p style="font-size: 16px; color: #555;">Hi {{name}},</p>
+    <p style="font-size: 16px; color: #555;">You've requested a 2-factor authentication code for accessing your account. Here is your code:</p>
+    <div style="background-color: #f9f9f9; padding: 10px; border-radius: 5px; text-align: center; font-size: 24px; font-weight: bold; color: #2678d0;">
+      {{token}}
+    </div>
+    <p style="font-size: 16px; color: #555;">This code will expire in 10 minutes.</p>
+    <p style="font-size: 16px; color: #555;">If you didn't request this code, please ignore this email.</p>
+    <p style="font-size: 16px; color: #555;">Best regards,<br>Your App Team</p>
+  </div>
+</body>
+</html> 

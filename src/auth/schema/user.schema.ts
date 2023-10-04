@@ -21,6 +21,12 @@ export class User {
 
     @Prop()
     isAdmin: boolean
+
+    @Prop()
+    isVerified: boolean
+
+    @Prop()
+    verificationToken: string
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);
